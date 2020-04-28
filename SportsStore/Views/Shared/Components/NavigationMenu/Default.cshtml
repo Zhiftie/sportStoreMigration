@@ -1,0 +1,39 @@
+﻿@model IEnumerable<string>
+@using IdentityServer4.Extensions
+@{
+    string name = null;
+    string tenant = null;
+    if (!true.Equals(ViewData["signed-out"]))
+    {
+        name = Context.User?.FindFirst("name")?.Value;
+
+        Console.WriteLine("TEST ------------------------------------");
+        tenant = Context.User?.FindFirst("tenant")?.Value;
+        Console.WriteLine(tenant);
+    }
+}
+
+@if (name != null)
+{
+    <p>Logged in as: @name </p>
+    <p> Belonging to: @tenant </p>
+}
+
+<a class="btn btn-block btn-secondary"
+   asp-action="List"
+   asp-controller="Product"
+   asp-route-category="">
+    Home
+</a>
+
+@foreach (string category in Model)
+{
+    <a class="btn btn-block
+       @(category == ViewBag.SelectedCategory ? "btn-primary": "btn-secondary")"
+       asp-action="List"
+       asp-controller="Product"
+       asp-route-category="@category"
+       asp-route-productPage="1">
+        @category
+    </a>
+}

@@ -1,0 +1,8 @@
+{
+    "identityServer": {
+        "baseUrl" : "http://localhost:5000",
+        "endpoints": {
+            "getClaims": "/connect/userInfo"
+        }
+    }
+}

@@ -1,0 +1,45 @@
+{
+    "ReRoutes": [
+        {
+            "DownstreamPathTemplate": "/products",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                    {
+                        "Host": "localhost",
+                        "Port": 7002
+                    }
+                ],
+            "UpstreamPathTemplate": "/api/products",
+            "UpstreamHttpMethod": ["GET"],
+            "AuthenticationOptions": {
+                "AuthenticationProvicerKey": "TestKey",
+                "AllowedScoped": []
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/cart-api/cartline",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                    {
+                        "Host": "localhost",
+                        "Port": 7003
+                    }
+                ],
+            "UpstreamPathTemplate": "/api/cartline"
+        },
+        {
+            "DownstreamPathTemplate": "/cart-api/checkout",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                    {
+                        "Host": "localhost",
+                        "Port": 7003
+                    }
+                ],
+            "UpstreamPathTemplate": "/api/checkout"
+        }
+    ],
+    "GlobalConfiguration": {
+        "BaseUrl": "https://localhost:7000"
+    }
+}
