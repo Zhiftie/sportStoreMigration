@@ -1,0 +1,16 @@
+{
+  "name": "tenantmanager",
+  "version": "1.0.0",
+  "description": "tenant manager for sportsStore",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^3.3.3",
+    "node-fetch": "^2.6.0"
+  }
+}
