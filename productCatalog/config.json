@@ -1,0 +1,14 @@
+
+    {
+        "endpoints": {
+            "tenantManager": {
+                "baseUrl": "http://localhost:3000/",
+                "endpoints": {
+                    "getUserClaims":"getUserClaims"
+                }
+            }
+
+
+        }
+    }
+

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'; 
 import product from '../models/productModel.js';
+import tenantManager from '../utils/tenantManager'
 
 
 exports.getProduct = (req, res) => {
@@ -17,6 +18,11 @@ exports.getProduct = (req, res) => {
 };
 
 exports.getAllProducts = (req, res) => {
+    tenantManager.getUserClaims(req.headers.authorization).then(response => {
+        console.log(response);
+    }).catch(err => {
+        console.log(err)
+    })
     product.find({}, (err, products) => {
         if (err) {
             res.send(err);
