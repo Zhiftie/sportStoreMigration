@@ -1,0 +1,3 @@
+--- When running a new Docker DB container, the schema will initially not be empty.      ---
+--- Flyway will detect this and needs to baseline on a version in order to accept this.  ---
+--- So this script does nothing, but marks where an existing schema should be baselined. ---
