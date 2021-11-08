@@ -6,7 +6,7 @@
             "DownstreamHostAndPorts": [
                     {
                         "Host": "localhost",
-                        "Port": 7002
+                        "Port": 8080
                     }
                 ],
             "UpstreamPathTemplate": "/api/products",
