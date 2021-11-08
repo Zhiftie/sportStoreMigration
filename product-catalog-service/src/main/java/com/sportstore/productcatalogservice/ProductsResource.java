@@ -8,6 +8,9 @@ import java.util.stream.StreamSupport;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +32,8 @@ public class ProductsResource {
 
     @GetMapping
     public List<Product> getProducts() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        System.out.println(securityContext);
         return StreamSupport.stream((productCatalogRepository.findAll().spliterator()), false).collect(Collectors.toList());
     }
 
