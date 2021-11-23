@@ -6,7 +6,7 @@ CREATE TABLE public.order_line
     order_id bigint NOT NULL,
     PRIMARY KEY (order_line_id),
     CONSTRAINT fk_order_id FOREIGN KEY (order_id)
-    REFERENCES public."order" (order_id) MATCH SIMPLE
+    REFERENCES public."orders" (order_id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID

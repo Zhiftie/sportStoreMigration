@@ -13,7 +13,7 @@ CREATE TABLE public.shipping_info
     shipped boolean,
     PRIMARY KEY (shipping_info_id),
     CONSTRAINT fk_order_id FOREIGN KEY (order_id)
-    REFERENCES public."order" (order_id) MATCH SIMPLE
+    REFERENCES public."orders" (order_id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE CASCADE
     NOT VALID

@@ -1,4 +1,4 @@
-CREATE TABLE public."order"
+CREATE TABLE public."orders"
 (
     order_id bigserial NOT NULL,
     customer_id text NOT NULL,
@@ -6,5 +6,5 @@ CREATE TABLE public."order"
     PRIMARY KEY (order_id)
 );
 
-ALTER TABLE IF EXISTS public."order"
+ALTER TABLE IF EXISTS public."orders"
     OWNER to dbuser;
