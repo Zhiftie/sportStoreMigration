@@ -1,22 +1,28 @@
 package com.sportstore.shoppingcartservice;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.sportstore.shoppingcartservice.config.RabbitMQConfig;
-import com.sportstore.shoppingcartservice.order.OrdersDTO;
+import com.sportstore.shoppingcartservice.model.db.CartLine;
+import com.sportstore.shoppingcartservice.model.dto.CartDTO;
+import com.sportstore.shoppingcartservice.model.dto.CartLineDTO;
+import com.sportstore.shoppingcartservice.model.dto.ProductDTO;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -30,33 +36,53 @@ public class CartResource {
 
     @GetMapping("cart")
     public List<CartLine> getCart() {
+        //Not needed
         return StreamSupport.stream((cartLineRepository.findAll().spliterator()), false).collect(Collectors.toList());
     }
 
     @PostMapping("cart")
     public List<CartLine> addCartLine() {
-        throw new UnsupportedOperationException("Todo");
+        //Not needed
+        throw new UnsupportedOperationException();
     }
 
     @GetMapping("cartline")
-    public CartLine getCartLine() {
-        throw new UnsupportedOperationException("Todo");
+    public CartLine getCartLine(@RequestBody CartLineRequest request) {
+        Optional<CartLine> optionalCartLine = cartLineRepository.findById(request.getCartId());
+        if(optionalCartLine.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart line does not exist");
+        }
+
+        return optionalCartLine.get();
     }
 
     @PutMapping("cartline")
     public CartLine updateCartLine() {
+        //TODO fix. Can this even be used?
         throw new UnsupportedOperationException("Todo");
     }
 
     @PostMapping("checkout")
-    public CartLine checkout() {
-        OrdersDTO ordersDTO = new OrdersDTO();
-        ordersDTO.setOrderId(1L);
-        ordersDTO.setCustomerId("123");
-        ordersDTO.setTotalCost(999d);
+    public CartLine checkout(@RequestBody CartDTO cart) {
         //TODO fix
-        rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_CREATE, ordersDTO);
+        cart.setTotalCost(calculateCosts(cart.getLineCollection()));
+        rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_CREATE, cart);
         return new CartLine();
     }
+
+    private double calculateCosts(List<CartLineDTO> cartLineDTOS) {
+        if (cartLineDTOS == null) {
+            return 0;
+        }
+        //TODO fix quantity
+        return cartLineDTOS.stream().map(CartLineDTO::getProduct).map(ProductDTO::getPrice).mapToDouble(Double::doubleValue).sum();
+    }
+
+
+}
+
+@Data
+class CartLineRequest {
+    private long cartId;
 
 }

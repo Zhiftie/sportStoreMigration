@@ -1,4 +1,4 @@
-package com.sportstore.shoppingcartservice;
+package com.sportstore.shoppingcartservice.model.db;
 
 
 import javax.persistence.Column;

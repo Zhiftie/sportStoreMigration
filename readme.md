@@ -1,6 +1,10 @@
 #TODO
 
-Add missing endpoints for shopping-cart-service
-Add rabbitmq setup
-Add consumer in product-order-service
-Add producer in shopping-cart-service
+<ul>
+<li>Add missing endpoints for shopping-cart-service</li>
+<li>Check what endpoints are actually used</li>
+<li>Get example requests</li>
+<li>Add virtual host setup for rabbitmq producer and consumer</li>
+<li>Integrate with tenant manger</li>
+<li>Fix frontend</li>
+</ul>
