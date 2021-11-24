@@ -1,14 +1,21 @@
 package com.sportstore.shoppingcartservice;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.sportstore.shoppingcartservice.config.RabbitMQConfig;
+import com.sportstore.shoppingcartservice.order.OrdersDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class CartResource {
 
     private final CartLineRepository cartLineRepository;
+    private final RabbitTemplate rabbitTemplate;
 
 
     @GetMapping("cart")
@@ -42,7 +50,13 @@ public class CartResource {
 
     @PostMapping("checkout")
     public CartLine checkout() {
-        throw new UnsupportedOperationException("Todo");
+        OrdersDTO ordersDTO = new OrdersDTO();
+        ordersDTO.setOrderId(1L);
+        ordersDTO.setCustomerId("123");
+        ordersDTO.setTotalCost(999d);
+        //TODO fix
+        rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_CREATE, ordersDTO);
+        return new CartLine();
     }
 
 }
