@@ -1,7 +1,7 @@
 <h2>TODO</h2>
 
 <ul>
-  <li>Add virtual host setup for rabbitmq producer and consumer</li>
+  <li>Use header to use correct rabbitTemplate to publish</li>
   <li>Create shipping info service</li>
   <li>Integrate with tenant manger</li>
   <li>Create rfid service</li>

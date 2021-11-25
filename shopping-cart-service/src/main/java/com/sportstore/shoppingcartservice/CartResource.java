@@ -42,16 +42,16 @@ public class CartResource {
     @Resource(name = "v2RabbitTemplate")
     private RabbitTemplate v2RabbitTemplate;
 
-    public void sendMessageByTopic(String cartJson) {
+    public void sendMessageByTopic(CartDTO cartDTO) {
         v1RabbitTemplate.convertAndSend(
                 EXCHANGE,
                 "tenantx.key",
-                cartJson);
+                cartDTO);
 
         v2RabbitTemplate.convertAndSend(
                 EXCHANGE,
                 "tenanty.key",
-                cartJson);
+                cartDTO);
     }
 
     @GetMapping("cart")
@@ -86,10 +86,8 @@ public class CartResource {
     @PostMapping("checkout")
     public void checkout(@RequestBody CartDTO cart) throws JsonProcessingException {
         cart.setTotalCost(calculateCosts(cart.getLines()));
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonString = mapper.writeValueAsString(cart);
 
-        sendMessageByTopic(jsonString);
+        sendMessageByTopic(cart);
     }
 
     private double calculateCosts(List<CartLineDTO> cartLineDTOS) {

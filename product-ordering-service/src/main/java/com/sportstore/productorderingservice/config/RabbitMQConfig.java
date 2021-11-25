@@ -55,6 +55,7 @@ public class RabbitMQConfig {
     ) {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
+        factory.setMessageConverter(jsonConverter());
         return factory;
     }
 
@@ -98,6 +99,7 @@ public class RabbitMQConfig {
             @Qualifier("v1ConnectionFactory") ConnectionFactory connectionFactory) {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
+        factory.setMessageConverter(jsonConverter());
         return factory;
     }
 
