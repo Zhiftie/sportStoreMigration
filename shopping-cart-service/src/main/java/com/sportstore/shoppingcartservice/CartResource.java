@@ -2,7 +2,6 @@ package com.sportstore.shoppingcartservice;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -48,6 +47,7 @@ public class CartResource {
 
     @GetMapping("cartline")
     public CartLine getCartLine(@RequestBody CartLineRequest request) {
+        //Not needed
         Optional<CartLine> optionalCartLine = cartLineRepository.findById(request.getCartId());
         if(optionalCartLine.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart line does not exist");
@@ -58,14 +58,13 @@ public class CartResource {
 
     @PutMapping("cartline")
     public CartLine updateCartLine() {
-        //TODO fix. Can this even be used?
+        //Not needed
         throw new UnsupportedOperationException("Todo");
     }
 
     @PostMapping("checkout")
     public CartLine checkout(@RequestBody CartDTO cart) {
-        //TODO fix
-        cart.setTotalCost(calculateCosts(cart.getLineCollection()));
+        cart.setTotalCost(calculateCosts(cart.getLines()));
         rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_CREATE, cart);
         return new CartLine();
     }
@@ -74,8 +73,7 @@ public class CartResource {
         if (cartLineDTOS == null) {
             return 0;
         }
-        //TODO fix quantity
-        return cartLineDTOS.stream().map(CartLineDTO::getProduct).map(ProductDTO::getPrice).mapToDouble(Double::doubleValue).sum();
+        return cartLineDTOS.stream().mapToDouble(c -> c.getProduct().getPrice() * c.getQuantity()).sum();
     }
 
 

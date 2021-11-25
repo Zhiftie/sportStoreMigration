@@ -4,10 +4,9 @@ import lombok.Data;
 
 @Data
 public class ProductDTO {
-    private Long productId;
-    private String name;
-    private String description;
-    private Double price;
-    private String category;
-
+	private String description;
+	private String category;
+	private double price;
+	private int productID;
+	private String name;
 }
