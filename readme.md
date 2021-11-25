@@ -9,4 +9,6 @@
 </ul>
 
 #Setup
-use "website" as tenant-group
+<ul>
+  <li>use "website" as tenant-group</li>
+</ul>
