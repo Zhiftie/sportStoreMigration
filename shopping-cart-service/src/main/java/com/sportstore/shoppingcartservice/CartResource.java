@@ -63,10 +63,9 @@ public class CartResource {
     }
 
     @PostMapping("checkout")
-    public CartLine checkout(@RequestBody CartDTO cart) {
+    public void checkout(@RequestBody CartDTO cart) {
         cart.setTotalCost(calculateCosts(cart.getLines()));
         rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_CREATE, cart);
-        return new CartLine();
     }
 
     private double calculateCosts(List<CartLineDTO> cartLineDTOS) {
