@@ -1,25 +1,18 @@
 package com.sportstore.productcatalogservice;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +22,21 @@ public class ProductsResource {
     private final ProductCatalogRepository productCatalogRepository;
 
     @GetMapping
-    public List<Product> getProducts() {
+    public List<Product> getProducts(@RequestHeader Map<String, String> headers) {
+
+        final HttpHeaders headers2 = new HttpHeaders();
+        headers2.set("User-Agent", "eltabo");
+        headers2.set("Authorization", headers.get("authorization"));
+
+        //Create a new HttpEntity
+        final HttpEntity<String> entity = new HttpEntity<String>(headers2);
+
+        RestTemplate restTemplate = new RestTemplate();
+        //Execute the method writing your HttpEntity to the request
+        ResponseEntity<Map> response = restTemplate.exchange("http://localhost:5000/connect/userinfo", HttpMethod.GET, entity, Map.class);
+
+        System.out.println(response);
+
         return StreamSupport.stream((productCatalogRepository.findAll().spliterator()), false).collect(Collectors.toList());
     }
 
