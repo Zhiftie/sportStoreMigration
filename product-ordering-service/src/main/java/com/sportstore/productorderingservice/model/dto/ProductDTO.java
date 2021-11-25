@@ -1,13 +1,19 @@
 package com.sportstore.productorderingservice.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Data;
 
 @Data
 public class ProductDTO {
-    private Long productId;
-    private String name;
-    private String description;
-    private Double price;
-    private String category;
-
+	@JsonProperty("Description")
+	private String description;
+	@JsonProperty("Category")
+	private String category;
+	@JsonProperty("Price")
+	private double price;
+	@JsonProperty("ProductID")
+	private int productID;
+	@JsonProperty("Name")
+	private String name;
 }

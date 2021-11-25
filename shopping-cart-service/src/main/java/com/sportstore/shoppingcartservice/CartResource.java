@@ -1,9 +1,13 @@
 package com.sportstore.shoppingcartservice;
 
+import static com.sportstore.shoppingcartservice.config.RabbitMQConfig.EXCHANGE;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import javax.annotation.Resource;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpStatus;
@@ -15,11 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sportstore.shoppingcartservice.config.RabbitMQConfig;
 import com.sportstore.shoppingcartservice.model.db.CartLine;
 import com.sportstore.shoppingcartservice.model.dto.CartDTO;
 import com.sportstore.shoppingcartservice.model.dto.CartLineDTO;
-import com.sportstore.shoppingcartservice.model.dto.ProductDTO;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +35,24 @@ import lombok.RequiredArgsConstructor;
 public class CartResource {
 
     private final CartLineRepository cartLineRepository;
-    private final RabbitTemplate rabbitTemplate;
+    //private final RabbitTemplate rabbitTemplate;
+    @Resource(name = "v1RabbitTemplate")
+    private RabbitTemplate v1RabbitTemplate;
 
+    @Resource(name = "v2RabbitTemplate")
+    private RabbitTemplate v2RabbitTemplate;
+
+    public void sendMessageByTopic(String cartJson) {
+        v1RabbitTemplate.convertAndSend(
+                EXCHANGE,
+                "tenantx.key",
+                cartJson);
+
+        v2RabbitTemplate.convertAndSend(
+                EXCHANGE,
+                "tenanty.key",
+                cartJson);
+    }
 
     @GetMapping("cart")
     public List<CartLine> getCart() {
@@ -49,7 +70,7 @@ public class CartResource {
     public CartLine getCartLine(@RequestBody CartLineRequest request) {
         //Not needed
         Optional<CartLine> optionalCartLine = cartLineRepository.findById(request.getCartId());
-        if(optionalCartLine.isEmpty()) {
+        if (optionalCartLine.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart line does not exist");
         }
 
@@ -63,9 +84,12 @@ public class CartResource {
     }
 
     @PostMapping("checkout")
-    public void checkout(@RequestBody CartDTO cart) {
+    public void checkout(@RequestBody CartDTO cart) throws JsonProcessingException {
         cart.setTotalCost(calculateCosts(cart.getLines()));
-        rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_CREATE, cart);
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = mapper.writeValueAsString(cart);
+
+        sendMessageByTopic(jsonString);
     }
 
     private double calculateCosts(List<CartLineDTO> cartLineDTOS) {
@@ -75,11 +99,11 @@ public class CartResource {
         return cartLineDTOS.stream().mapToDouble(c -> c.getProduct().getPrice() * c.getQuantity()).sum();
     }
 
-
 }
 
 @Data
 class CartLineRequest {
+
     private long cartId;
 
 }
