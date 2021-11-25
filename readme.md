@@ -6,5 +6,7 @@
 <li>Get example requests</li>
 <li>Add virtual host setup for rabbitmq producer and consumer</li>
 <li>Integrate with tenant manger</li>
-<li>Fix frontend</li>
 </ul>
+
+#Setup
+use "website" as tenant-group
