@@ -1,5 +1,8 @@
 package com.sportstore.shoppingcartservice.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -16,7 +19,7 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String ORDER_CREATE = "ORDER_CREATE";
+    //public static final String ORDER_CREATE = "ORDER_CREATE";
     public static final String EXCHANGE = "sportstore";
 
     @Bean(name = "v2ConnectionFactory")
@@ -108,5 +111,16 @@ public class RabbitMQConfig {
         RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
         rabbitAdmin.setAutoStartup(true);
         return rabbitAdmin;
+    }
+
+
+    @Bean
+    public Map<String, RabbitTemplate> rabbitTemplateMap(@Qualifier("v1ConnectionFactory") ConnectionFactory connectionFactoryTenantX,
+            @Qualifier("v2ConnectionFactory") ConnectionFactory connectionFactoryTenantY) {
+        HashMap<String, RabbitTemplate> rabbitTemplateHashMap = new HashMap<>();
+        rabbitTemplateHashMap.put("TenantX", tenantXRabbitTemplate(connectionFactoryTenantX));
+        rabbitTemplateHashMap.put("TenantY", tenantYRabbitTemplate(connectionFactoryTenantY));
+
+        return rabbitTemplateHashMap;
     }
 }

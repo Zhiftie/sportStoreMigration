@@ -17,15 +17,15 @@ import org.springframework.messaging.handler.annotation.Header;
 public class OrderCreateEventConsumer {
 
     @RabbitListener(queues = RabbitMQConfig.ORDER_CREATE, containerFactory = "v2ContainerFactory" )
-    public void onMessageReceivedTenantY(CartDTO message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws IOException {
-        System.out.println("Message received!: " + message);
+    public void onMessageReceivedTenantY(CartDTO message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
+        System.out.println("Message received tenantY!: " + message);
         handleOrderCreate(message);
         //TODO create order from cartDTO and save
     }
 
     @RabbitListener(queues = RabbitMQConfig.ORDER_CREATE, containerFactory = "v1ContainerFactory" )
-    public void onMessageReceivedTenantX(CartDTO message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws IOException {
-        System.out.println("Message received!: " + message);
+    public void onMessageReceivedTenantX(CartDTO message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
+        System.out.println("Message received tenantX!: " + message);
         handleOrderCreate(message);
         //TODO create order from cartDTO and save
     }

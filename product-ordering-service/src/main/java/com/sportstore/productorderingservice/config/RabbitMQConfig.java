@@ -1,5 +1,7 @@
 package com.sportstore.productorderingservice.config;
 
+import org.springframework.amqp.core.AnonymousQueue;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -16,7 +18,7 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String ORDER_CREATE = "ORDER_CREATE";
+    public static final String ORDER_CREATE = "product-ordering-service-ORDER_CREATE";
     public static final String EXCHANGE = "sportstore";
 
     @Bean(name = "v2ConnectionFactory")

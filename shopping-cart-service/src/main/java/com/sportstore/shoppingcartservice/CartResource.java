@@ -3,6 +3,7 @@ package com.sportstore.shoppingcartservice;
 import static com.sportstore.shoppingcartservice.config.RabbitMQConfig.EXCHANGE;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -19,9 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sportstore.shoppingcartservice.config.RabbitMQConfig;
 import com.sportstore.shoppingcartservice.model.db.CartLine;
 import com.sportstore.shoppingcartservice.model.dto.CartDTO;
 import com.sportstore.shoppingcartservice.model.dto.CartLineDTO;
@@ -35,22 +33,20 @@ import lombok.RequiredArgsConstructor;
 public class CartResource {
 
     private final CartLineRepository cartLineRepository;
-    //private final RabbitTemplate rabbitTemplate;
-    @Resource(name = "v1RabbitTemplate")
-    private RabbitTemplate v1RabbitTemplate;
 
-    @Resource(name = "v2RabbitTemplate")
-    private RabbitTemplate v2RabbitTemplate;
+    /*    @Resource(name = "v1RabbitTemplate")
+        private RabbitTemplate v1RabbitTemplate;
+        @Resource(name = "v2RabbitTemplate")
+        private RabbitTemplate v2RabbitTemplate;*/
+    @Resource
+    private final Map<String, RabbitTemplate> rabbitTemplateMap;
+    @Resource
+    private UserInfo userInfo;
 
     public void sendMessageByTopic(CartDTO cartDTO) {
-        v1RabbitTemplate.convertAndSend(
+        rabbitTemplateMap.get(userInfo.getTenant()).convertAndSend(
                 EXCHANGE,
-                "tenantx.key",
-                cartDTO);
-
-        v2RabbitTemplate.convertAndSend(
-                EXCHANGE,
-                "tenanty.key",
+                "",
                 cartDTO);
     }
 
@@ -84,9 +80,8 @@ public class CartResource {
     }
 
     @PostMapping("checkout")
-    public void checkout(@RequestBody CartDTO cart) throws JsonProcessingException {
+    public void checkout(@RequestBody CartDTO cart) {
         cart.setTotalCost(calculateCosts(cart.getLines()));
-
         sendMessageByTopic(cart);
     }
 
