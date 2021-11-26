@@ -1,6 +1,6 @@
 package com.sportstore.shoppingcartservice.config;
 
-import static com.sportstore.shoppingcartservice.config.RabbitMQConfig.EXCHANGE;
+import static com.sportstore.shoppingcartservice.config.RabbitMQConfig.CART_CHECKOUT_EXCHANGE;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -20,20 +20,7 @@ public class RabbitMQCreateConfig {
 
     @PostConstruct
     public void init() {
-        v2RabbitAdmin.declareExchange(new FanoutExchange(EXCHANGE, true, false));
-       /* v2RabbitAdmin.declareQueue(new Queue(ORDER_CREATE, true));
-        v2RabbitAdmin.declareBinding(
-                BindingBuilder
-                        .bind(new Queue(ORDER_CREATE, true))
-                        .to(new TopicExchange(EXCHANGE, true, false))
-                        .with("tenanty.key"));*/
-
-        v1RabbitAdmin.declareExchange(new FanoutExchange(EXCHANGE, true, false));
-/*        v1RabbitAdmin.declareQueue(new Queue(ORDER_CREATE, true));
-        v1RabbitAdmin.declareBinding(
-                BindingBuilder
-                        .bind(new Queue(ORDER_CREATE, true))
-                        .to(new TopicExchange(EXCHANGE, true, false))
-                        .with("tenantx.key"));*/
+        v2RabbitAdmin.declareExchange(new FanoutExchange(CART_CHECKOUT_EXCHANGE, true, false));
+        v1RabbitAdmin.declareExchange(new FanoutExchange(CART_CHECKOUT_EXCHANGE, true, false));
     }
 }

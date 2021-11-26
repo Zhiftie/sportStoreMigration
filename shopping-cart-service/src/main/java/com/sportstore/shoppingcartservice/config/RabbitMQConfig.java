@@ -19,8 +19,7 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class RabbitMQConfig {
 
-    //public static final String ORDER_CREATE = "ORDER_CREATE";
-    public static final String EXCHANGE = "sportstore";
+    public static final String CART_CHECKOUT_EXCHANGE = "sportstore.cart.checkout";
 
     @Bean(name = "v2ConnectionFactory")
     public CachingConnectionFactory tenantYConnectionFactory(

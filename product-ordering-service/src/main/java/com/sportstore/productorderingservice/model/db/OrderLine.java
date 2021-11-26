@@ -9,6 +9,11 @@ import lombok.Data;
 @Table(name = "order_line")
 public class OrderLine {
     @Id
+    @SequenceGenerator(name="order_line_order_line_id_seq",
+            sequenceName="order_line_order_line_id_seq",
+            allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator="order_line_order_line_id_seq")
     @Column(name = "order_line_id")
     private Long orderLineId;
 

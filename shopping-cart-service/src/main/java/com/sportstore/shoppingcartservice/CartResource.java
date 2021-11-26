@@ -1,6 +1,6 @@
 package com.sportstore.shoppingcartservice;
 
-import static com.sportstore.shoppingcartservice.config.RabbitMQConfig.EXCHANGE;
+import static com.sportstore.shoppingcartservice.config.RabbitMQConfig.CART_CHECKOUT_EXCHANGE;
 
 import java.util.List;
 import java.util.Map;
@@ -33,11 +33,6 @@ import lombok.RequiredArgsConstructor;
 public class CartResource {
 
     private final CartLineRepository cartLineRepository;
-
-    /*    @Resource(name = "v1RabbitTemplate")
-        private RabbitTemplate v1RabbitTemplate;
-        @Resource(name = "v2RabbitTemplate")
-        private RabbitTemplate v2RabbitTemplate;*/
     @Resource
     private final Map<String, RabbitTemplate> rabbitTemplateMap;
     @Resource
@@ -45,7 +40,7 @@ public class CartResource {
 
     public void sendMessageByTopic(CartDTO cartDTO) {
         rabbitTemplateMap.get(userInfo.getTenant()).convertAndSend(
-                EXCHANGE,
+                CART_CHECKOUT_EXCHANGE,
                 "",
                 cartDTO);
     }

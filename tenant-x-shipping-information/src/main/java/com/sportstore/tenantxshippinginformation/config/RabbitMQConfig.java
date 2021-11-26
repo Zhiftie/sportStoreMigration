@@ -1,10 +1,5 @@
-package com.sportstore.productorderingservice.config;
+package com.sportstore.tenantxshippinginformation.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.amqp.core.AnonymousQueue;
-import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -21,57 +16,14 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String CART_CHECKOUT_EVENT = "product-ordering-service-CART_CHECKOUT_EVENT";
-    public static final String CART_CHECKOUT_EXCHANGE = "sportstore.cart.checkout";
+    public static final String ORDER_CREATED = "tenant-x-shipping-information-service-ORDER_CREATED";
     public static final String ORDER_CREATED_EXCHANGE = "sportstore.order.created";
-
-    @Bean(name = "v2ConnectionFactory")
-    public CachingConnectionFactory tenantYConnectionFactory(
-            @Value("${v2.spring.rabbitmq.host}") String host,
-            @Value("${v2.spring.rabbitmq.port}") int port,
-            @Value("${v2.spring.rabbitmq.username}") String username,
-            @Value("${v2.spring.rabbitmq.password}") String password,
-            @Value("${v2.spring.rabbitmq.virtual-host}") String virtualHost) {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setHost(host);
-        connectionFactory.setPort(port);
-        connectionFactory.setUsername(username);
-        connectionFactory.setPassword(password);
-        connectionFactory.setVirtualHost(virtualHost);
-        return connectionFactory;
-    }
-
-    @Bean(name = "v2RabbitTemplate")
-    @Primary
-    public RabbitTemplate tenantYRabbitTemplate(
-            @Qualifier("v2ConnectionFactory") ConnectionFactory connectionFactory) {
-        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(jsonConverter());
-        return rabbitTemplate;
-    }
 
     @Bean
     public MessageConverter jsonConverter() {
         return new Jackson2JsonMessageConverter();
     }
 
-    @Bean(name = "v2ContainerFactory")
-    public SimpleRabbitListenerContainerFactory tenantYListenerFactory(
-            @Qualifier("v2ConnectionFactory") ConnectionFactory connectionFactory
-    ) {
-        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
-        factory.setMessageConverter(jsonConverter());
-        return factory;
-    }
-
-    @Bean(name = "v2RabbitAdmin")
-    public RabbitAdmin tenantYRabbitAdmin(
-            @Qualifier("v2ConnectionFactory") ConnectionFactory connectionFactory) {
-        RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
-        rabbitAdmin.setAutoStartup(true);
-        return rabbitAdmin;
-    }
 
     @Bean(name = "v1ConnectionFactory")
     @Primary
@@ -116,15 +68,5 @@ public class RabbitMQConfig {
         RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
         rabbitAdmin.setAutoStartup(true);
         return rabbitAdmin;
-    }
-
-    @Bean
-    public Map<String, RabbitTemplate> rabbitTemplateMap(@Qualifier("v1ConnectionFactory") ConnectionFactory connectionFactoryTenantX,
-            @Qualifier("v2ConnectionFactory") ConnectionFactory connectionFactoryTenantY) {
-        HashMap<String, RabbitTemplate> rabbitTemplateHashMap = new HashMap<>();
-        rabbitTemplateHashMap.put("TenantX", tenantXRabbitTemplate(connectionFactoryTenantX));
-        rabbitTemplateHashMap.put("TenantY", tenantYRabbitTemplate(connectionFactoryTenantY));
-
-        return rabbitTemplateHashMap;
     }
 }

@@ -10,6 +10,11 @@ import lombok.Data;
 public class ShippingInfo {
 
     @Id
+    @SequenceGenerator(name="shipping_info_shipping_info_id_seq",
+            sequenceName="shipping_info_shipping_info_id_seq",
+            allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator="shipping_info_shipping_info_id_seq")
     @Column(name = "shipping_info_id")
     private Long shippingInfoId;
 
