@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.sportstore.productorderingservice.config.RabbitMQConfig;
 import com.rabbitmq.client.Channel;
+import com.sportstore.productorderingservice.eventbus.EventBusService;
 import com.sportstore.productorderingservice.model.db.Order;
 import com.sportstore.productorderingservice.model.db.OrderLine;
 import com.sportstore.productorderingservice.model.db.ShippingInfo;
@@ -21,6 +22,7 @@ import com.sportstore.productorderingservice.model.dto.CartDTO;
 import com.sportstore.productorderingservice.model.dto.OrderLineDTO;
 import com.sportstore.productorderingservice.model.dto.OrdersDTO;
 import com.sportstore.productorderingservice.model.dto.ShippingInfoDTO;
+import com.sportstore.productorderingservice.model.events.OrderCreatedEvent;
 
 import org.springframework.amqp.support.AmqpHeaders;
 
@@ -32,21 +34,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OrderCreateEventConsumer {
 
-    @Resource
-    private final Map<String, RabbitTemplate> rabbitTemplateMap;
+    private final EventBusService eventBusService;
     private final OrderRepository orderRepository;
     private final ShippingInfoRepository shippingInfoRepository;
     private final OrderLineRepository orderLineRepository;
 
     @RabbitListener(queues = RabbitMQConfig.CART_CHECKOUT_EVENT, containerFactory = "v2ContainerFactory")
     public void onMessageReceivedTenantY(CartDTO message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
-        System.out.println("Message received tenantY!: " + message);
         handleOrderCreate(message, "TenantY");
     }
 
     @RabbitListener(queues = RabbitMQConfig.CART_CHECKOUT_EVENT, containerFactory = "v1ContainerFactory")
     public void onMessageReceivedTenantX(CartDTO message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
-        System.out.println("Message received tenantX!: " + message);
         handleOrderCreate(message, "TenantX");
     }
 
@@ -111,8 +110,12 @@ public class OrderCreateEventConsumer {
         shippingInfoDTO.setState(order.getShippingInfo().getState());
         shippingInfoDTO.setOrderId(order.getShippingInfo().getOrderId());
         ordersDTO.setShippingInfo(shippingInfoDTO);
-        rabbitTemplateMap.get(tenant).convertAndSend(ORDER_CREATED_EXCHANGE,
-                "",
-                ordersDTO);
+        // TODO replace with EventBusServiceImpl
+        OrderCreatedEvent orderCreatedEvent = new OrderCreatedEvent();
+        orderCreatedEvent.setOrdersDTO(ordersDTO);
+        orderCreatedEvent.setTenant(tenant);
+        orderCreatedEvent.setName(OrderCreatedEvent.class.getSimpleName());
+
+        eventBusService.publishEvent(ORDER_CREATED_EXCHANGE, orderCreatedEvent);
     }
 }
