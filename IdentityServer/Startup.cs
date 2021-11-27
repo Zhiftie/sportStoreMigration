@@ -39,6 +39,10 @@ namespace IdentityServer
                 app.UseExceptionHandler("/Error");
 
             }
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Lax
+            });
 
             app.UseIdentityServer();
             app.UseStaticFiles();
