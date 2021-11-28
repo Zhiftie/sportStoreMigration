@@ -41,5 +41,6 @@ namespace SportsStore.Models {
         public class ShippingInfo {
         public string Name { get; set;}
         public string Zip { get; set;}
+        public bool Shipped { get; set;}
     }
 }

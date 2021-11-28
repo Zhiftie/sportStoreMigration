@@ -16,12 +16,14 @@
                 <th>Product</th>
                 <th>Quantity</th>
                 <td>
-                    <form asp-action="MarkShipped" method="post">
-                        <input type="hidden" name="orderId" value="@o.OrderID" />
-                        <button type="submit" class="btn btn-sm btn-danger">
-                            Ship
-                        </button>
-                    </form>
+                    @if (@o.ShippingInfo.Shipped)
+                    {
+                    <p>Shipped</p>
+                    }
+                    else
+                    {
+                    <p>Not shipped</p>
+                    }
                 </td>
             </tr>
             @foreach (CartLine line in o.Lines) {
