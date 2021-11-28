@@ -9,6 +9,6 @@ public class OrdersDTO {
     private Long orderId;
     private String customerId;
     private double totalCost;
-    private Set<OrderLineDTO> orderLines;
+    private Set<OrderLineDTO> Lines;
     private ShippingInfoDTO shippingInfo;
 }

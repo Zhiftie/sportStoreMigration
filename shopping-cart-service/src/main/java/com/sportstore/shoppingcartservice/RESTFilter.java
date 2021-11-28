@@ -44,6 +44,11 @@ public class RESTFilter implements Filter {
             final HttpEntity<String> entity = new HttpEntity<>(headers);
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<Map> response = restTemplate.exchange("http://localhost:5000/connect/userinfo", HttpMethod.GET, entity, Map.class);
+            if(response.hasBody() && response.getBody().containsKey("website") && response.getBody().get("website").toString().equals("omegalul.com")) {
+                userInfo.setTenant("TenantX");
+            } else {
+                userInfo.setTenant("TenantY");
+            }
             //TODO set fields in userInfo
         } else {
             userInfo.setName("Bob");

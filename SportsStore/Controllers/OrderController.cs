@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using SportsStore.Models;
 using System.Linq;
@@ -14,27 +15,29 @@ using Newtonsoft.Json;
 namespace SportsStore.Controllers {
 
     public class OrderController : Controller {
-        private IOrderRepository repository;
         private Cart cart;
 
-        public OrderController(IOrderRepository repoService, Cart cartService) {
-            repository = repoService;
+        public OrderController(Cart cartService) {
             cart = cartService;
         }
 
         [Authorize]
-        public ViewResult List() =>
-            View(repository.Orders.Where(o => !o.Shipped));
+        public ViewResult List() {
+            Console.WriteLine("yolo");
+            var client = new HttpClient();
+            var task = Task.Run(() => client.GetStringAsync("http://localhost:7000/api/orders")); 
+            task.Wait();
+            var response = task.Result;
+            var orders = JsonConvert.DeserializeObject<List<Order>>(response);
+            Console.WriteLine("Orders is " + orders);
+            Console.WriteLine(orders[0]);
+            return View(orders);
+        }
 
         [HttpPost]
         [Authorize]
         public IActionResult MarkShipped(int orderID) {
-            Order order = repository.Orders
-                .FirstOrDefault(o => o.OrderID == orderID);
-            if (order != null) {
-                order.Shipped = true;
-                repository.SaveOrder(order);
-            }
+            //TODO or remove
             return RedirectToAction(nameof(List));
         }
 

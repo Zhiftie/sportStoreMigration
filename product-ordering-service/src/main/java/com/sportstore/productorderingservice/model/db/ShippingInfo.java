@@ -48,6 +48,9 @@ public class ShippingInfo {
     @Column(name = "shipped")
     private Boolean shipped;
 
+    @Column(name = "zip")
+    private String zip;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", referencedColumnName = "order_id", insertable =  false, updatable = false)
     private Order order;

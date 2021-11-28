@@ -26,6 +26,9 @@ public class OrderLine {
     @Column(name = "order_id")
     private Long orderId;
 
+    @Column(name = "product_name")
+    private String productName;
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id", referencedColumnName = "order_id", insertable =  false, updatable = false)
     private Order order;

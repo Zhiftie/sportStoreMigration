@@ -19,8 +19,8 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("test")
-public class TestResource {
+@RequestMapping("orders")
+public class OrdersResource {
 
     private final OrderRepository orderRepository;
 
@@ -43,9 +43,10 @@ public class TestResource {
             orderLineDTO.setOrderId(o.getOrderId());
             orderLineDTO.setQuantity(o.getQuantity());
             orderLineDTO.setProductId(o.getProductId());
+            orderLineDTO.setProductName(o.getProductName());
             orderLineDTOSet.add(orderLineDTO);
         });
-        ordersDTO.setOrderLines(orderLineDTOSet);
+        ordersDTO.setLines(orderLineDTOSet);
         ShippingInfoDTO shippingInfoDTO = new ShippingInfoDTO();
         shippingInfoDTO.setShippingInfoId(order.getShippingInfo().getShippingInfoId());
         shippingInfoDTO.setCity(order.getShippingInfo().getCity());
@@ -58,6 +59,7 @@ public class TestResource {
         shippingInfoDTO.setName(order.getShippingInfo().getName());
         shippingInfoDTO.setState(order.getShippingInfo().getState());
         shippingInfoDTO.setOrderId(order.getShippingInfo().getOrderId());
+        shippingInfoDTO.setZip(order.getShippingInfo().getZip());
         ordersDTO.setShippingInfo(shippingInfoDTO);
 
         return ordersDTO;

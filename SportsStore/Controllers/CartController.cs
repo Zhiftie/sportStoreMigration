@@ -14,11 +14,9 @@ using SportsStore.Models.ViewModels;
 namespace SportsStore.Controllers {
 
     public class CartController : Controller {
-        private IProductRepository repository;
         private Cart cart;
 
-        public CartController(IProductRepository repo, Cart cartService) {
-            repository = repo;
+        public CartController(Cart cartService) {
             cart = cartService;
         }
 
@@ -34,19 +32,12 @@ namespace SportsStore.Controllers {
 
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            var content = await client.GetStringAsync($"http://localhost:7002/products/{productId}");
+            var content = await client.GetStringAsync($"http://localhost:7000/api/products/{productId}");
             Console.WriteLine(content.GetType());
             Console.WriteLine(content);
 
-            var parsedProduct = JsonConvert.DeserializeObject<List<Product>>(content);
-            if (parsedProduct.Count>0)
-            {
-                var product = parsedProduct[0];
-                if (product != null)
-                {
-                    cart.AddItem(product, 1);
-                }
-            }
+            var parsedProduct = JsonConvert.DeserializeObject<Product>(content);
+            cart.AddItem(parsedProduct, 1);
             
 
             foreach (var line in cart.Lines)
@@ -65,9 +56,11 @@ namespace SportsStore.Controllers {
 
         public RedirectToActionResult RemoveFromCart(int productId,
                 string returnUrl) {
-            Product product = repository.Products
-                .FirstOrDefault(p => p.ProductID == productId);
-
+            var client = new HttpClient();
+            var task = Task.Run(() => client.GetStringAsync("http://localhost:7000/api/products/" + productId)); 
+            task.Wait();
+            var response = task.Result;
+            var product = JsonConvert.DeserializeObject<Product>(response);
             if (product != null) {
                 cart.RemoveLine(product);
             }

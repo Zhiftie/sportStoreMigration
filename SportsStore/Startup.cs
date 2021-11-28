@@ -49,23 +49,9 @@ namespace SportsStore {
 
                 });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration["Data:SportStoreProducts:ConnectionString"]));
 
-            /*services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration["Data:SportStoreIdentity:ConnectionString"]));
-
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<AppIdentityDbContext>()
-                .AddDefaultTokenProviders();
-                */
-
-            services.AddTransient<IProductRepository, EFProductRepository>();
             services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<IOrderRepository, EFOrderRepository>();
             services.AddMvc();
             services.AddMemoryCache();
             services.AddSession();
@@ -112,8 +98,6 @@ namespace SportsStore {
                 routes.MapRoute(name: null, template: "{controller}/{action}/{id?}");
             });
             
-            //SeedData.EnsurePopulated(app);
-            //IdentitySeedData.EnsurePopulated(app);
         }
     }
 }

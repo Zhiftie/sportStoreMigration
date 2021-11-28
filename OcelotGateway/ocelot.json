@@ -17,12 +17,60 @@
             }
         },
         {
+            "DownstreamPathTemplate": "/products/categories",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                    {
+                        "Host": "localhost",
+                        "Port": 8080
+                    }
+                ],
+            "UpstreamPathTemplate": "/api/products/categories",
+            "UpstreamHttpMethod": ["GET"],
+            "AuthenticationOptions": {
+                "AuthenticationProvicerKey": "TestKey",
+                "AllowedScoped": []
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/products/{productId}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                    {
+                        "Host": "localhost",
+                        "Port": 8080
+                    }
+                ],
+            "UpstreamPathTemplate": "/api/products/{productId}",
+            "UpstreamHttpMethod": ["GET"],
+            "AuthenticationOptions": {
+                "AuthenticationProvicerKey": "TestKey",
+                "AllowedScoped": []
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/orders",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                    {
+                        "Host": "localhost",
+                        "Port": 8081
+                    }
+                ],
+            "UpstreamPathTemplate": "/api/orders",
+            "UpstreamHttpMethod": ["GET"],
+            "AuthenticationOptions": {
+                "AuthenticationProvicerKey": "TestKey",
+                "AllowedScoped": []
+            }
+        },
+        {
             "DownstreamPathTemplate": "/cart-api/cartline",
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                     {
                         "Host": "localhost",
-                        "Port": 7003
+                        "Port": 8082
                     }
                 ],
             "UpstreamPathTemplate": "/api/cartline"
@@ -33,7 +81,7 @@
             "DownstreamHostAndPorts": [
                     {
                         "Host": "localhost",
-                        "Port": 7003
+                        "Port": 8082
                     }
                 ],
             "UpstreamPathTemplate": "/api/checkout"

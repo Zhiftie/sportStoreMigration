@@ -11,8 +11,8 @@
         <tr><th>Name</th><th>Zip</th><th colspan="2">Details</th><th></th></tr>
         @foreach (Order o in Model) {
             <tr>
-                <td>@o.Name</td>
-                <td>@o.Zip</td>
+                <td>@o.ShippingInfo.Name</td>
+                <td>@o.ShippingInfo.Zip</td>
                 <th>Product</th>
                 <th>Quantity</th>
                 <td>
@@ -27,7 +27,7 @@
             @foreach (CartLine line in o.Lines) {
                 <tr>
                     <td colspan="2"></td>
-                    <td>@line.Product.Name</td>
+                    <td>@line.ProductName</td>
                     <td>@line.Quantity</td>
                     <td></td>
                 </tr>

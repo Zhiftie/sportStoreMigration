@@ -3,13 +3,9 @@ package com.sportstore.productorderingservice;
 import static com.sportstore.productorderingservice.config.RabbitMQConfig.ORDER_CREATED_EXCHANGE;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Resource;
-
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
 import com.sportstore.productorderingservice.config.RabbitMQConfig;
@@ -65,6 +61,7 @@ public class OrderCreateEventConsumer {
         shippingInfo.setLine3(cartDTO.getLine3());
         shippingInfo.setState(cartDTO.getState());
         shippingInfo.setName(cartDTO.getName());
+        shippingInfo.setZip(cartDTO.getZip());
         shippingInfo.setOrderId(order.getOrderId());
         shippingInfoRepository.save(shippingInfo);
         order.setShippingInfo(shippingInfo);
@@ -74,6 +71,7 @@ public class OrderCreateEventConsumer {
             orderLine.setQuantity((long) cl.getQuantity());
             orderLine.setProductId((long) cl.getProduct().getProductID());
             orderLine.setOrderId(order.getOrderId());
+            orderLine.setProductName(cl.getProduct().getName());
             orderLineSet.add(orderLine);
         });
         orderLineRepository.saveAll(orderLineSet);
@@ -96,7 +94,7 @@ public class OrderCreateEventConsumer {
             orderLineDTO.setProductId(o.getProductId());
             orderLineDTOSet.add(orderLineDTO);
         });
-        ordersDTO.setOrderLines(orderLineDTOSet);
+        ordersDTO.setLines(orderLineDTOSet);
         ShippingInfoDTO shippingInfoDTO = new ShippingInfoDTO();
         shippingInfoDTO.setShippingInfoId(order.getShippingInfo().getShippingInfoId());
         shippingInfoDTO.setCity(order.getShippingInfo().getCity());

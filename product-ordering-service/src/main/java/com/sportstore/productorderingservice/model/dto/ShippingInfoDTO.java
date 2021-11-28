@@ -16,4 +16,5 @@ public class ShippingInfoDTO {
     private String country;
     private Boolean giftWrap;
     private Boolean shipped;
+    private String zip;
 }
