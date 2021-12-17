@@ -16,4 +16,10 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
 
     CREATE DATABASE tenant_manager;
     GRANT ALL PRIVILEGES ON DATABASE tenant_manager TO dbuser;
+
+    CREATE DATABASE tenant_y_event;
+    GRANT ALL PRIVILEGES ON DATABASE tenant_y_event TO dbuser;
+
+    CREATE DATABASE tenant_y_rfid;
+    GRANT ALL PRIVILEGES ON DATABASE tenant_y_rfid TO dbuser;
 EOSQL
