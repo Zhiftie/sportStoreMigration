@@ -1,8 +1,7 @@
 package com.sportstore.productorderingservice;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -26,7 +25,7 @@ public class OrdersResource {
 
     @GetMapping
     public List<OrdersDTO> getOrders() {
-        List<Order> orders = StreamSupport.stream((orderRepository.findAll().spliterator()), false).collect(Collectors.toList());
+        List<Order> orders = StreamSupport.stream((orderRepository.findAll().spliterator()), false).toList();
 
         return orders.stream().map(this::convertToOrderDTO).collect(Collectors.toList());
     }
@@ -36,7 +35,7 @@ public class OrdersResource {
         ordersDTO.setOrderId(order.getOrderId());
         ordersDTO.setCustomerId(order.getCustomerId());
         ordersDTO.setTotalCost(order.getTotalCost());
-        Set<OrderLineDTO> orderLineDTOSet = new HashSet<>();
+        List<OrderLineDTO> orderLineDTOS = new ArrayList<>();
         order.getOrderLines().forEach(o -> {
             OrderLineDTO orderLineDTO = new OrderLineDTO();
             orderLineDTO.setOrderLineId(o.getOrderLineId());
@@ -44,9 +43,9 @@ public class OrdersResource {
             orderLineDTO.setQuantity(o.getQuantity());
             orderLineDTO.setProductId(o.getProductId());
             orderLineDTO.setProductName(o.getProductName());
-            orderLineDTOSet.add(orderLineDTO);
+            orderLineDTOS.add(orderLineDTO);
         });
-        ordersDTO.setLines(orderLineDTOSet);
+        ordersDTO.setLines(orderLineDTOS);
         ShippingInfoDTO shippingInfoDTO = new ShippingInfoDTO();
         shippingInfoDTO.setShippingInfoId(order.getShippingInfo().getShippingInfoId());
         shippingInfoDTO.setCity(order.getShippingInfo().getCity());

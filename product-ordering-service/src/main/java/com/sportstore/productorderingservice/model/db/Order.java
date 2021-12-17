@@ -1,6 +1,7 @@
 package com.sportstore.productorderingservice.model.db;
 
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -37,7 +38,7 @@ public class Order {
     private double totalCost;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "order", cascade = CascadeType.ALL)
-    private Set<OrderLine> orderLines;
+    private List<OrderLine> orderLines;
 
     @OneToOne(mappedBy = "order")
     private ShippingInfo shippingInfo;

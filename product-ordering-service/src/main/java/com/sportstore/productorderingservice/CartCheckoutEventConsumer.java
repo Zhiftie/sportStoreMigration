@@ -2,8 +2,8 @@ package com.sportstore.productorderingservice;
 
 import static com.sportstore.productorderingservice.config.RabbitMQConfig.ORDER_CREATED_EXCHANGE;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
@@ -18,6 +18,7 @@ import com.sportstore.productorderingservice.model.dto.CartDTO;
 import com.sportstore.productorderingservice.model.dto.OrderLineDTO;
 import com.sportstore.productorderingservice.model.dto.OrdersDTO;
 import com.sportstore.productorderingservice.model.dto.ShippingInfoDTO;
+import com.sportstore.productorderingservice.model.events.CartCheckoutEvent;
 import com.sportstore.productorderingservice.model.events.OrderCreatedEvent;
 
 import org.springframework.amqp.support.AmqpHeaders;
@@ -28,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class OrderCreateEventConsumer {
+public class CartCheckoutEventConsumer {
 
     private final EventBusService eventBusService;
     private final OrderRepository orderRepository;
@@ -36,13 +37,13 @@ public class OrderCreateEventConsumer {
     private final OrderLineRepository orderLineRepository;
 
     @RabbitListener(queues = RabbitMQConfig.CART_CHECKOUT_EVENT, containerFactory = "v2ContainerFactory")
-    public void onMessageReceivedTenantY(CartDTO message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
-        handleOrderCreate(message, "TenantY");
+    public void onMessageReceivedTenantY(CartCheckoutEvent message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
+        handleOrderCreate(message.getCartDTO(), "TenantY");
     }
 
     @RabbitListener(queues = RabbitMQConfig.CART_CHECKOUT_EVENT, containerFactory = "v1ContainerFactory")
-    public void onMessageReceivedTenantX(CartDTO message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
-        handleOrderCreate(message, "TenantX");
+    public void onMessageReceivedTenantX(CartCheckoutEvent message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
+        handleOrderCreate(message.getCartDTO(), "TenantX");
     }
 
     private void handleOrderCreate(CartDTO cartDTO, String tenant) {
@@ -65,17 +66,17 @@ public class OrderCreateEventConsumer {
         shippingInfo.setOrderId(order.getOrderId());
         shippingInfoRepository.save(shippingInfo);
         order.setShippingInfo(shippingInfo);
-        Set<OrderLine> orderLineSet = new HashSet<>();
+        List<OrderLine> orderLines = new ArrayList<>();
         cartDTO.getLines().forEach(cl -> {
             OrderLine orderLine = new OrderLine();
             orderLine.setQuantity((long) cl.getQuantity());
             orderLine.setProductId((long) cl.getProduct().getProductID());
             orderLine.setOrderId(order.getOrderId());
             orderLine.setProductName(cl.getProduct().getName());
-            orderLineSet.add(orderLine);
+            orderLines.add(orderLine);
         });
-        orderLineRepository.saveAll(orderLineSet);
-        order.setOrderLines(orderLineSet);
+        orderLineRepository.saveAll(orderLines);
+        order.setOrderLines(orderLines);
         publishOrderCreated(order, tenant);
         //TODO create order from cartDTO and save and then publish new event
     }
@@ -85,16 +86,16 @@ public class OrderCreateEventConsumer {
         ordersDTO.setOrderId(order.getOrderId());
         ordersDTO.setCustomerId(order.getCustomerId());
         ordersDTO.setTotalCost(order.getTotalCost());
-        Set<OrderLineDTO> orderLineDTOSet = new HashSet<>();
+        List<OrderLineDTO> orderLineDTOS = new ArrayList<>();
         order.getOrderLines().forEach(o -> {
             OrderLineDTO orderLineDTO = new OrderLineDTO();
             orderLineDTO.setOrderLineId(o.getOrderLineId());
             orderLineDTO.setOrderId(o.getOrderId());
             orderLineDTO.setQuantity(o.getQuantity());
             orderLineDTO.setProductId(o.getProductId());
-            orderLineDTOSet.add(orderLineDTO);
+            orderLineDTOS.add(orderLineDTO);
         });
-        ordersDTO.setLines(orderLineDTOSet);
+        ordersDTO.setLines(orderLineDTOS);
         ShippingInfoDTO shippingInfoDTO = new ShippingInfoDTO();
         shippingInfoDTO.setShippingInfoId(order.getShippingInfo().getShippingInfoId());
         shippingInfoDTO.setCity(order.getShippingInfo().getCity());

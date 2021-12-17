@@ -1,10 +1,8 @@
-package com.sportstore.productorderingservice.config;
+package com.sportstore.productshippingservice.config;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.amqp.core.AnonymousQueue;
-import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -21,13 +19,9 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String CART_CHECKOUT_EVENT = "product-ordering-service-CART_CHECKOUT_EVENT";
-    public static final String CART_CHECKOUT_EXCHANGE = "sportstore.cart.checkout";
-
-    public static final String ORDER_CREATED_EXCHANGE = "sportstore.order.created";
-
-    public static final String ORDER_SHIPPED_EVENT = "product-ordering-service-ORDER_SHIPPED_EVENT";
     public static final String SHIPPING_EXCHANGE = "sportstore.shipping";
+    public static final String ORDER_CREATED_EVENT = "product-shipping-service-ORDER_CREATED_EVENT";
+    public static final String ORDER_CREATED_EXCHANGE = "sportstore.order.created";
 
     @Bean(name = "v2ConnectionFactory")
     public CachingConnectionFactory tenantYConnectionFactory(

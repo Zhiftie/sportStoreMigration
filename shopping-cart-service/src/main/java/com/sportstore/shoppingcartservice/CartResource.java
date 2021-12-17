@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.sportstore.shoppingcartservice.eventbus.EventBusService;
 import com.sportstore.shoppingcartservice.model.db.CartLine;
 import com.sportstore.shoppingcartservice.model.dto.CartDTO;
 import com.sportstore.shoppingcartservice.model.dto.CartLineDTO;
+import com.sportstore.shoppingcartservice.model.event.CartCheckoutEvent;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -33,17 +35,10 @@ import lombok.RequiredArgsConstructor;
 public class CartResource {
 
     private final CartLineRepository cartLineRepository;
-    @Resource
-    private final Map<String, RabbitTemplate> rabbitTemplateMap;
+    private final EventBusService eventBusService;
     @Resource
     private UserInfo userInfo;
 
-    public void sendMessageByTopic(CartDTO cartDTO) {
-        rabbitTemplateMap.get(userInfo.getTenant()).convertAndSend(
-                CART_CHECKOUT_EXCHANGE,
-                "",
-                cartDTO);
-    }
 
     @GetMapping("cart")
     public List<CartLine> getCart() {
@@ -77,7 +72,11 @@ public class CartResource {
     @PostMapping("checkout")
     public void checkout(@RequestBody CartDTO cart) {
         cart.setTotalCost(calculateCosts(cart.getLines()));
-        sendMessageByTopic(cart);
+        CartCheckoutEvent cartCheckoutEvent = new CartCheckoutEvent();
+        cartCheckoutEvent.setCartDTO(cart);
+        cartCheckoutEvent.setName(CartCheckoutEvent.class.getSimpleName());
+        cartCheckoutEvent.setTenant(userInfo.getTenant());
+        eventBusService.publishEvent(CART_CHECKOUT_EXCHANGE, cartCheckoutEvent);
     }
 
     private double calculateCosts(List<CartLineDTO> cartLineDTOS) {
