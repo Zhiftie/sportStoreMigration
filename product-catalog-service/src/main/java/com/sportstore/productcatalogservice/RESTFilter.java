@@ -49,7 +49,6 @@ public class RESTFilter implements Filter {
             } else {
                 userInfo.setTenant("TenantY");
             }
-            //TODO set fields in userInfo
         } else {
             userInfo.setName("Bob");
             userInfo.setTenant("TenantX");

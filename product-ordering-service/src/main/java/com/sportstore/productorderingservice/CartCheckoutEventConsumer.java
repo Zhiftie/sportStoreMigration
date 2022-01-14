@@ -78,7 +78,6 @@ public class CartCheckoutEventConsumer {
         orderLineRepository.saveAll(orderLines);
         order.setOrderLines(orderLines);
         publishOrderCreated(order, tenant);
-        //TODO create order from cartDTO and save and then publish new event
     }
 
     private void publishOrderCreated(Order order, String tenant) {
@@ -109,7 +108,6 @@ public class CartCheckoutEventConsumer {
         shippingInfoDTO.setState(order.getShippingInfo().getState());
         shippingInfoDTO.setOrderId(order.getShippingInfo().getOrderId());
         ordersDTO.setShippingInfo(shippingInfoDTO);
-        // TODO replace with EventBusServiceImpl
         OrderCreatedEvent orderCreatedEvent = new OrderCreatedEvent();
         orderCreatedEvent.setOrdersDTO(ordersDTO);
         orderCreatedEvent.setTenant(tenant);

@@ -35,7 +35,7 @@ public class OrderCreatedEventConsumer {
     private void handleOrderCreatedEvent(OrderCreatedEvent message) {
         OrderShippedEvent orderShippedEvent = new OrderShippedEvent();
         orderShippedEvent.setName(OrderShippedEvent.class.getSimpleName());
-        orderShippedEvent.setTenant("TenantY"); //TODO REVERT!
+        orderShippedEvent.setTenant(message.getTenant());
         orderShippedEvent.setOrderShipped(true);
         orderShippedEvent.setOrdersDTO(message.getOrdersDTO());
         eventBusService.publishEvent(SHIPPING_EXCHANGE, orderShippedEvent);

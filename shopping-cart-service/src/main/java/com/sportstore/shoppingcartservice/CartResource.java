@@ -66,7 +66,7 @@ public class CartResource {
     @PutMapping("cartline")
     public CartLine updateCartLine() {
         //Not needed
-        throw new UnsupportedOperationException("Todo");
+        throw new UnsupportedOperationException("");
     }
 
     @PostMapping("checkout")
