@@ -28,7 +28,7 @@ public class EventBusServiceImpl implements EventBusService {
     @Override
     public void publishEvent(String exchange, Event event) {
         CustomisationInfoDTO customisationInfoDTO = checkIfEventIsCustomised(event);
-        if (customisationInfoDTO.getEndpoint() != null) {
+        if(!event.isDoNotCheckForCustomisation() && customisationInfoDTO.getEndpoint() != null) {
             sendEventToTenant(customisationInfoDTO, event);
         } else {
             rabbitTemplateMap.get(event.getTenant()).convertAndSend(exchange, "", event);
