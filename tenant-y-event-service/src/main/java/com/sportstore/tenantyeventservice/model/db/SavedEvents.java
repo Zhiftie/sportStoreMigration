@@ -9,6 +9,11 @@ import lombok.Data;
 @Table(name = "saved_events")
 public class SavedEvents {
     @Id
+    @SequenceGenerator(name="saved_events_saved_event_id_seq",
+            sequenceName="saved_events_saved_event_id_seq",
+            allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator="saved_events_saved_event_id_seq")
     @Column(name = "saved_event_id")
     private Long savedEventId;
 

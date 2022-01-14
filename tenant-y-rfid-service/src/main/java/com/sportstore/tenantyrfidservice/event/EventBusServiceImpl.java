@@ -1,4 +1,4 @@
-package com.sportstore.tenantyeventservice.eventbus;
+package com.sportstore.tenantyrfidservice.event;
 
 import java.util.Map;
 import java.util.Objects;
@@ -14,7 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import com.sportstore.tenantyeventservice.model.dto.CustomisationInfoDTO;
+
+import com.sportstore.tenantyrfidservice.model.dto.CustomisationInfoDTO;
 
 import lombok.RequiredArgsConstructor;
 

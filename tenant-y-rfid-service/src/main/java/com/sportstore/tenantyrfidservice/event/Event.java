@@ -1,4 +1,4 @@
-package com.sportstore.tenantyeventservice.eventbus;
+package com.sportstore.tenantyrfidservice.event;
 
 import lombok.Data;
 
@@ -8,3 +8,4 @@ public abstract class Event {
     private String name;
     private boolean doNotCheckForCustomisation;
 }
+

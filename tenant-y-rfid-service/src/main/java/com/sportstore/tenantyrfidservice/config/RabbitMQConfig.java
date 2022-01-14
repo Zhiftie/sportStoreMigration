@@ -1,4 +1,4 @@
-package com.sportstore.tenantyeventservice.config;
+package com.sportstore.tenantyrfidservice.config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,10 +19,9 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String SHIPPING_EXCHANGE = "sportstore.shipping";
     public static final String TENANT_Y_EVENT_EXCHANGE = "sportstore.tenanty.event";
     public static final String TENANT_Y_RFID_EXCHANGE = "sportstore.tenanty.rfid";
-    public static final String RFID_TAG_SCANNED_EVENT = "tenant-y-event-service-RFID_TAG_SCANNED_EVENT";
+    public static final String ORDER_SHIPPED_SAVED_EVENT = "tenant-y-rfid-service-ORDER_SHIPPED_SAVED_EVENT";
 
 
     @Bean(name = "v2ConnectionFactory")
