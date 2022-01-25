@@ -28,12 +28,12 @@ public class ShippingInformationResource {
         return StreamSupport.stream((shippingInformationRepository.findAll().spliterator()), false).collect(Collectors.toList());
     }
 
-    @GetMapping("{shippingInformationId}")
-    public ShippingInformation getShippingInformation(@PathVariable long shippingInformationId) {
-        Optional<ShippingInformation> optionalShippingInformation = shippingInformationRepository.findById(shippingInformationId);
+    @GetMapping("{orderId}")
+    public ShippingInformation getShippingInformation(@PathVariable long orderId) {
+        ShippingInformation shippingInformation = shippingInformationRepository.findShippingInformationByOrderId(orderId);
 
-        if (optionalShippingInformation.isPresent()) {
-            return optionalShippingInformation.get();
+        if (shippingInformation != null) {
+            return shippingInformation;
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Shipping information not found");
     }
