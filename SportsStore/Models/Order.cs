@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
@@ -36,11 +37,20 @@ namespace SportsStore.Models {
         public bool GiftWrap { get; set; }
 
         public ShippingInfo ShippingInfo { get; set;}
+        public ShippingInformation ShippingInformation { get; set; }
     }
 
         public class ShippingInfo {
         public string Name { get; set;}
         public string Zip { get; set;}
         public bool Shipped { get; set;}
+    }
+
+        public class ShippingInformation
+    {
+        public DateTime arrivalTime { get; set;}
+        public DateTime shippingTime { get; set;}
+        public int orderId { get; set; }
+        public int shippingInformationId { get; set;}
     }
 }

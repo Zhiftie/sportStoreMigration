@@ -1,38 +1,52 @@
 ﻿@model IEnumerable<Order>
 
-@{
+    @{
     ViewBag.Title = "Orders";
     Layout = "_AdminLayout";
-}
+    string tenant = null;
+    tenant = Context.User?.FindFirst("sub")?.Value;
+    Console.WriteLine(tenant);
+    }
 
-@if (Model.Count() > 0) {
+    @if (Model.Count() > 0) {
 
     <table class="table table-bordered table-striped">
-        <tr><th>Name</th><th>Zip</th><th colspan="2">Details</th><th></th></tr>
+        <tr><th>Name</th><th>Zip</th><th colspan="2">Details</th><th></th><th></th><th></th></tr>
         @foreach (Order o in Model) {
-            <tr>
-                <td>@o.ShippingInfo.Name</td>
-                <td>@o.ShippingInfo.Zip</td>
-                <th>Product</th>
-                <th>Quantity</th>
-                <td>
-                    @if (@o.ShippingInfo.Shipped)
+        <tr>
+            <td>@o.ShippingInfo.Name</td>
+            <td>@o.ShippingInfo.Zip</td>
+            <th>Product</th>
+            <th>Quantity</th>
+            <td>
+                @if (@o.ShippingInfo.Shipped)
                     {
-                    <p>Shipped</p>
+                <p>Shipped</p>
                     }
                     else
                     {
-                    <p>Not shipped</p>
+                <p>Not shipped</p>
                     }
-                </td>
-            </tr>
-            @foreach (CartLine line in o.Lines) {
-                <tr>
-                    <td colspan="2"></td>
-                    <td>@line.ProductName</td>
-                    <td>@line.Quantity</td>
-                    <td></td>
-                </tr>
+            </td>
+            @if (@tenant == "2" && @o.ShippingInformation != null)
+                {
+            <td>Shipping date: @o.ShippingInformation.shippingTime</td>
+            <td>Arrival date: @o.ShippingInformation.arrivalTime</td>
+                    }
+            }
+        </tr>
+        @foreach (CartLine line in o.Lines) {
+        <tr>
+            <td colspan="2"></td>
+            <td>@line.ProductName</td>
+            <td>@line.Quantity</td>
+            <td></td>
+            @if (@tenant == "2")
+                {
+            <td></td>
+            <td></td>
+        }
+        </tr>
 
             }
         }

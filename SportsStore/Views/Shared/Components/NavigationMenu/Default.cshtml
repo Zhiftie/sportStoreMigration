@@ -6,10 +6,7 @@
     if (!true.Equals(ViewData["signed-out"]))
     {
         name = Context.User?.FindFirst("name")?.Value;
-
-        Console.WriteLine("TEST ------------------------------------");
         tenant = Context.User?.FindFirst("tenant")?.Value;
-        Console.WriteLine(tenant);
     }
 }
 

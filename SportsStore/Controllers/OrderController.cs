@@ -16,6 +16,7 @@ namespace SportsStore.Controllers {
 
     public class OrderController : Controller {
         private Cart cart;
+        private static readonly String TENANT_X = "2";
 
         public OrderController(Cart cartService) {
             cart = cartService;
@@ -23,15 +24,36 @@ namespace SportsStore.Controllers {
 
         [Authorize]
         public ViewResult List() {
-            Console.WriteLine("yolo");
             var client = new HttpClient();
             var task = Task.Run(() => client.GetStringAsync("http://localhost:7000/api/orders")); 
             task.Wait();
             var response = task.Result;
             var orders = JsonConvert.DeserializeObject<List<Order>>(response);
-            Console.WriteLine("Orders is " + orders);
-            Console.WriteLine(orders[0]);
+            String tenant = HttpContext.User.FindFirst("sub")?.Value;
+            if(tenant.Equals(TENANT_X))
+            {
+                orders.ForEach(order => {
+                    try 
+	                {	        
+		                var shippingInformation = FetchShippingInformation(order.OrderID);
+                        order.ShippingInformation = shippingInformation;
+	                }
+	                catch (Exception)
+	                {
+                        //Ignore
+	                }
+                });
+            }
             return View(orders);
+        }
+
+        private ShippingInformation FetchShippingInformation(int orderId)
+        {
+            var client = new HttpClient();
+            var task = Task.Run(() => client.GetStringAsync("http://localhost:8083/shippinginformation/" + orderId)); 
+            task.Wait();
+            var response = task.Result;
+            return JsonConvert.DeserializeObject<ShippingInformation>(response);
         }
 
         [HttpPost]
