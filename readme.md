@@ -12,9 +12,9 @@
 
 <h2>Product</h2>
 <h3>Main product flow</h3>
-![main_product_flow.png](main_product_flow.drawio.png)
+![Main product flow sequence diagram](main_product_flow.png)
 <h3>Customisation use cases</h3>
 <h4>Shipping information use case</h4>
-![shipping_information_flow.png](shipping_information_flow.drawio.png)
+![Shipping information sequence diagram](shipping_information_flow.png)
 <h4>RFID use case</h4>
-![rfid_flow.png](rfid_flow.drawio.png)
+![RFID use case sequence diagram](rfid_flow.png)
