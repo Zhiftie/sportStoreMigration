@@ -12,9 +12,9 @@
 
 <h2>Product</h2>
 <h3>Main product flow</h3>
-![Main product flow sequence diagram](main_product_flow.png)
+<img src="https://github.com/Zhiftie/sportStoreMigration/blob/main/main_product_flow.png" alt="Main product flow sequence diagram">
 <h3>Customisation use cases</h3>
 <h4>Shipping information use case</h4>
-![Shipping information sequence diagram](shipping_information_flow.png)
+<img src="https://github.com/Zhiftie/sportStoreMigration/blob/main/shipping_information_flow.png" alt="Shipping information sequence diagram">
 <h4>RFID use case</h4>
-![RFID use case sequence diagram](rfid_flow.png)
+<img src="https://github.com/Zhiftie/sportStoreMigration/blob/main/rfid_flow.png" alt="RFID use case sequence diagram">
