@@ -20,9 +20,11 @@ import org.springframework.context.annotation.Primary;
 public class RabbitMQConfig {
 
     public static final String SHIPPING_EXCHANGE = "sportstore.shipping";
+    public static final String CUSTOMISATION_EXCHANGE = "sportstore.customisation";
     public static final String TENANT_Y_EVENT_EXCHANGE = "sportstore.tenanty.event";
     public static final String TENANT_Y_RFID_EXCHANGE = "sportstore.tenanty.rfid";
     public static final String RFID_TAG_SCANNED_EVENT = "tenant-y-event-service-RFID_TAG_SCANNED_EVENT";
+    public static final String CUSTOMISATION_EVENT = "tenant-y-event-service-CUSTOMISATION_EVENT";
 
 
     @Bean(name = "v2ConnectionFactory")

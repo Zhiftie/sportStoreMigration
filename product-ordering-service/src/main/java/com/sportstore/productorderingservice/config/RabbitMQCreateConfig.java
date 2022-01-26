@@ -2,6 +2,7 @@ package com.sportstore.productorderingservice.config;
 
 import static com.sportstore.productorderingservice.config.RabbitMQConfig.CART_CHECKOUT_EXCHANGE;
 import static com.sportstore.productorderingservice.config.RabbitMQConfig.CART_CHECKOUT_EVENT;
+import static com.sportstore.productorderingservice.config.RabbitMQConfig.CUSTOMISATION_EXCHANGE;
 import static com.sportstore.productorderingservice.config.RabbitMQConfig.ORDER_CREATED_EXCHANGE;
 import static com.sportstore.productorderingservice.config.RabbitMQConfig.ORDER_SHIPPED_EVENT;
 import static com.sportstore.productorderingservice.config.RabbitMQConfig.SHIPPING_EXCHANGE;
@@ -53,5 +54,8 @@ public class RabbitMQCreateConfig {
 
         v2RabbitAdmin.declareExchange(new FanoutExchange(ORDER_CREATED_EXCHANGE, true, false));
         v1RabbitAdmin.declareExchange(new FanoutExchange(ORDER_CREATED_EXCHANGE, true, false));
+
+        v2RabbitAdmin.declareExchange(new FanoutExchange(CUSTOMISATION_EXCHANGE, true, false));
+        v1RabbitAdmin.declareExchange(new FanoutExchange(CUSTOMISATION_EXCHANGE, true, false));
     }
 }

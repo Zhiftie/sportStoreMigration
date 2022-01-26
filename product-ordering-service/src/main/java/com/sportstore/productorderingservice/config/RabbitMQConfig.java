@@ -29,6 +29,9 @@ public class RabbitMQConfig {
     public static final String ORDER_SHIPPED_EVENT = "product-ordering-service-ORDER_SHIPPED_EVENT";
     public static final String SHIPPING_EXCHANGE = "sportstore.shipping";
 
+    public static final String CUSTOMISATION_EXCHANGE = "sportstore.customisation";
+
+
     @Bean(name = "v2ConnectionFactory")
     public CachingConnectionFactory tenantYConnectionFactory(
             @Value("${v2.spring.rabbitmq.host}") String host,

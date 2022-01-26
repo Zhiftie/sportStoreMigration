@@ -44,8 +44,6 @@ public class EventResource {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
-        // Handle RFID scanned event, republish saved event
     }
 
 }

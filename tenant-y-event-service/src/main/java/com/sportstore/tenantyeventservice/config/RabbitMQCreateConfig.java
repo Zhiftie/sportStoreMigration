@@ -1,5 +1,7 @@
 package com.sportstore.tenantyeventservice.config;
 
+import static com.sportstore.tenantyeventservice.config.RabbitMQConfig.CUSTOMISATION_EVENT;
+import static com.sportstore.tenantyeventservice.config.RabbitMQConfig.CUSTOMISATION_EXCHANGE;
 import static com.sportstore.tenantyeventservice.config.RabbitMQConfig.RFID_TAG_SCANNED_EVENT;
 import static com.sportstore.tenantyeventservice.config.RabbitMQConfig.TENANT_Y_EVENT_EXCHANGE;
 import static com.sportstore.tenantyeventservice.config.RabbitMQConfig.TENANT_Y_RFID_EXCHANGE;
@@ -28,5 +30,11 @@ public class RabbitMQCreateConfig {
                 BindingBuilder
                         .bind(new Queue(RFID_TAG_SCANNED_EVENT, false))
                         .to(new FanoutExchange(TENANT_Y_RFID_EXCHANGE, true, true)));
+
+        v2RabbitAdmin.declareQueue(new Queue(CUSTOMISATION_EVENT, false));
+        v2RabbitAdmin.declareBinding(
+                BindingBuilder
+                        .bind(new Queue(CUSTOMISATION_EVENT, false))
+                        .to(new FanoutExchange(CUSTOMISATION_EXCHANGE, true, true)));
     }
 }

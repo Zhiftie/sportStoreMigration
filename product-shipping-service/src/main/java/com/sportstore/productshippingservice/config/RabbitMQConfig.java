@@ -22,6 +22,7 @@ public class RabbitMQConfig {
     public static final String SHIPPING_EXCHANGE = "sportstore.shipping";
     public static final String ORDER_CREATED_EVENT = "product-shipping-service-ORDER_CREATED_EVENT";
     public static final String ORDER_CREATED_EXCHANGE = "sportstore.order.created";
+    public static final String CUSTOMISATION_EXCHANGE = "sportstore.customisation";
 
     @Bean(name = "v2ConnectionFactory")
     public CachingConnectionFactory tenantYConnectionFactory(
