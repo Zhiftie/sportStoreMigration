@@ -41,6 +41,7 @@ public class EventResource {
             orderShippedSavedEvent.setName(OrderShippedSavedEvent.class.getSimpleName());
             orderShippedSavedEvent.setTenant(orderShippedEvent.getTenant());
             eventBusService.publishEvent(TENANT_Y_EVENT_EXCHANGE, orderShippedSavedEvent);
+            System.out.println(System.currentTimeMillis());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

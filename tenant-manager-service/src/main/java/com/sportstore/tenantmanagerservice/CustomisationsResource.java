@@ -2,6 +2,7 @@ package com.sportstore.tenantmanagerservice;
 
 import java.util.Optional;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ public class CustomisationsResource {
     private final CustomisationsRepository customisationsRepository;
 
     @GetMapping
+    @Cacheable(value= "customisations", key = "#tenant + #event")
     public Customisations getCustomisation(@RequestParam String tenant, @RequestParam String event) {
         if (event == null || tenant == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "tenant and event must be specified");

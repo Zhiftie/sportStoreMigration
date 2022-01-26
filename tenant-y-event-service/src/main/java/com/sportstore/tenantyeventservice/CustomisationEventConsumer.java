@@ -42,5 +42,6 @@ public class CustomisationEventConsumer {
         orderShippedSavedEvent.setName(OrderShippedSavedEvent.class.getSimpleName());
         orderShippedSavedEvent.setTenant(message.getTenant());
         eventBusService.publishEvent(TENANT_Y_EVENT_EXCHANGE, orderShippedSavedEvent);
+        System.out.println(System.currentTimeMillis());
     }
 }

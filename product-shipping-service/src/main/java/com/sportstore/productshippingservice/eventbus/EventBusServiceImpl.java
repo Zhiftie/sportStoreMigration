@@ -62,6 +62,7 @@ public class EventBusServiceImpl implements EventBusService {
     }
 
     private void sendEventToTenant(CustomisationInfoDTO customisationInfoDTO, Event event) {
+        System.out.println(System.currentTimeMillis());
         if(useRabbitMQ) {
             sendEventToTenantWithRabbitMQ(event);
         } else {
