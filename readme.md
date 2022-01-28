@@ -2,6 +2,7 @@
 
 <ul>
     <li>Change product-ordering-service to save user as well in order, and only fetch orders for the current users when fetching from API</li>
+    <li>Add RFID tags scanned status to frontend</li>
 </ul>
 
 <h2>Setup</h2>
