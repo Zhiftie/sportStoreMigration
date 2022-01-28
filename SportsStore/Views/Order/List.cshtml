@@ -5,7 +5,6 @@
     Layout = "_AdminLayout";
     string tenant = null;
     tenant = Context.User?.FindFirst("sub")?.Value;
-    Console.WriteLine(tenant);
     }
 
     @if (Model.Count() > 0) {
@@ -13,28 +12,41 @@
     <table class="table table-bordered table-striped">
         <tr><th>Name</th><th>Zip</th><th colspan="2">Details</th><th></th><th></th><th></th></tr>
         @foreach (Order o in Model) {
-        <tr>
-            <td>@o.ShippingInfo.Name</td>
-            <td>@o.ShippingInfo.Zip</td>
-            <th>Product</th>
-            <th>Quantity</th>
-            <td>
-                @if (@o.ShippingInfo.Shipped)
+    <tr>
+        <td>@o.ShippingInfo.Name</td>
+        <td>@o.ShippingInfo.Zip</td>
+        <th>Product</th>
+        <th>Quantity</th>
+        <td>
+            @if (@o.ShippingInfo.Shipped)
                     {
-                <p>Shipped</p>
+            <p>Shipped</p>
                     }
                     else
                     {
-                <p>Not shipped</p>
+            <p>Not shipped</p>
                     }
-            </td>
-            @if (@tenant == "2" && @o.ShippingInformation != null)
+        </td>
+        @if (@tenant == "1")
                 {
-            <td>Shipping date: @o.ShippingInformation.shippingTime</td>
-            <td>Arrival date: @o.ShippingInformation.arrivalTime</td>
+        <td>
+            @if (@o.ShippingInfo.Shipped)
+                    {
+            <p style="color: red;">RFID Tags scanned</p>
                     }
-            }
-        </tr>
+                    else
+                    {
+            <p style="color: red;">RFID Tags not scanned</p>
+                    }
+        </td>
+                    }
+        @if (@tenant == "2" && @o.ShippingInformation != null)
+                {
+        <td style="color: red;">Shipping date: @o.ShippingInformation.shippingTime</td>
+        <td style="color: red;">Arrival date: @o.ShippingInformation.arrivalTime</td>
+                    }
+        }
+    </tr>
         @foreach (CartLine line in o.Lines) {
         <tr>
             <td colspan="2"></td>
